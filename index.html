@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Search</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <input type="search" name="" id="userInput" placeholder="Enter Image To Search">
+        <button onclick="imageSearch()">Click</button>
+    </div>
+
+    <div class="img-container">
+
+    </div>
+    <button class="loadmore" onclick="loadMoreImage()">Load More</button>
+    
+    <script>
+        let key="dujmKfQPZ9XRXDgM49uYywTWmg_oRw0sgEUlQ_xuyiw"
+        // let url="https://api.unsplash.com/photos/?client_id=YOUR_ACCESS_KEY"
+        let userInput=document.querySelector("input");
+        let page=1;
+        // query parameters must write  if any value use
+        let per_page=12;
+        // userInput="";
+
+    async function imageSearch() {
+
+       try{
+         let res=await fetch(`https://api.unsplash.com/search/photos?page=${page}&per_page=${per_page}&query=${userInput.value}&client_id=${key}`)
+        let data=await res.json()
+        // dat is object not array
+        console.log(data)
+        // we cobert the object in array by API results
+       let results=data.results
+
+     
+
+        results.forEach((x)=>{
+           console.log( x.urls.small)
+             let imagesDivs=document.createElement("div")
+        imagesDivs.innerHTML=`<img src="${x.urls.small}" alt="${x.alt_description}">`
+        console.log(imagesDivs)
+        document.querySelector(".img-container").append(imagesDivs)
+
+        })
+
+        document.querySelector(".loadmore").style.display="flex"
+
+
+        
+      
+       }
+
+       
+       catch(err){
+        console.log(err)
+       }
+    }
+
+    function loadMoreImage(){
+            page++
+            console.log(page)
+            imageSearch();
+            
+            
+        }
+
+        
+    </script>
+</body>
+</html>
